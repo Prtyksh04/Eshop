@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Activation Email</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-color: #fafafa;
+            color: #222222;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        table td {
+            vertical-align: top;
+        }
+
+        .email-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .email-header {
+            background-color: #0070f3;
+            padding: 24px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .email-body {
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+        }
+
+        .otp-code {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 4px;
+            margin: 24px 0;
+            background-color: #f1f1f1;
+            padding: 12px;
+            border-radius: 6px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-wrapper">
+        <div class="email-header">
+            <h1>Welcome to ECom Seller Hub</h1>
+        </div>
+        <div class="email-body">
+            <p>Hello <strong><%= name %></strong>,</p>
+            <p>
+                Thank you for registering as a seller on ECom! We're thrilled to have you join our marketplace. To activate your seller account and start setting up your shop, please use the OTP below:
+            </p>
+            <div class="otp-code"><%= otp %></div>
+            <p>
+                Enter this OTP on the seller activation page within the next 5 minutes to verify your identity.
+            </p>
+            <p>
+                If you didn’t request this, no worries — your information is safe and no further steps are needed.
+            </p>
+        </div>
+        <div class="footer-text">
+            &copy; <%= new Date().getFullYear() %> ECom. All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>
