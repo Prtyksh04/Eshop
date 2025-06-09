@@ -25,7 +25,7 @@ model users {
   email       String        @unique
   password    String?
   following   String[]
-  avatar      images?       
+  avatar      images?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   shopReviews shopReviews[]
@@ -50,7 +50,7 @@ model shops {
   name          String
   bio           String?
   category      String
-  avatar        images?       
+  avatar        images?
   coverBanner   String?
   address       String
   opening_hours String?
@@ -122,6 +122,7 @@ model products {
   discount_codes        String[]      @db.ObjectId
   deletedAt             DateTime?
   status                productStatus @default(Active)
+  totalSales            Int           @default(0)
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
   shopId                String        @db.ObjectId

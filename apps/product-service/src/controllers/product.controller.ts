@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "@packages/libs/prisma";
 import { AuthError, NotFoundError, ValidationError } from "@packages/error-handler";
 import { imagekit } from "@packages/libs/imageKit";
+import { Prisma } from "@prisma/client";
 
 
 
@@ -326,6 +327,65 @@ export const restoreProduct = async (req: any, res: Response, next: NextFunction
         return res.status(200).json({
             message: "Product successfully Restored",
 
+        })
+
+    } catch (error) {
+        return next(error);
+    }
+}
+
+// get All products
+export const getAllProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+        const skip = (page - 1) * limit;
+
+        const type = req.query.type;
+
+        const baseFilter = {
+            // OR: [{
+            //     starting_date: null,
+            // }, {
+            //     ending_date: null
+            // }]
+        }
+
+        const orderBy: Prisma.productsOrderByWithRelationInput =
+            type === 'latest'
+                ? { createdAt: "desc" as Prisma.SortOrder }
+                : { totalSales: "desc" as Prisma.SortOrder };
+
+        const [products, total, top10Products] = await Promise.all([
+            prisma.products.findMany({
+                skip,
+                take: limit,
+                include: {
+                    images: true,
+                    Shop: true,
+                },
+                where: baseFilter,
+                orderBy: {
+                    totalSales: 'desc'
+                }
+            }),
+            prisma.products.count({ where: baseFilter }),
+            prisma.products.findMany({
+                take: 10,
+                where: baseFilter,
+                orderBy,
+            })
+        ])
+
+        console.log("Products", products);
+
+        res.status(200).json({
+            products,
+            top10By: type === 'latest' ? 'latest' : 'topSales',
+            top10Products,
+            total,
+            currentPage: page,
+            totalPage: Math.ceil(total / limit),
         })
 
     } catch (error) {
