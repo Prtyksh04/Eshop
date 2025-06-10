@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { HeartIcon, Search, ShoppingCart, UserRoundPenIcon } from 'lucide-react';
 import HeaderBottom from './header-bottom';
 import useUser from 'apps/user-ui/src/hooks/useUser';
+import { useStore } from 'apps/user-ui/src/store';
 
 const Header = () => {
     const { user, isLoading } = useUser();
+    const wishlist = useStore((state: any) => state.wishlist);
+    const cart = useStore((state: any) => state.cart);
 
     return (
         <div className="w-full bg-white">
@@ -61,13 +64,13 @@ const Header = () => {
                     <Link href="/wishlist" className="relative">
                         <HeartIcon />
                         <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center border-2 border-white">
-                            0
+                            {wishlist.length}
                         </div>
                     </Link>
                     <Link href="/cart" className="relative">
                         <ShoppingCart />
                         <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center border-2 border-white">
-                            0
+                            {cart.length}
                         </div>
                     </Link>
                 </div>
