@@ -7,7 +7,7 @@ const producer = kafka.producer();
 export async function sendKafkaEvent(eventData: {
     userId?: string;
     productId?: string;
-    shop?: string;
+    shopId?: string;
     action: string;
     device?: string;
     country?: string;

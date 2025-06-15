@@ -20,10 +20,11 @@ const processQueue = async () => {
       'add_to_wishList',
       'add_to_cart',
       'product_view',
+      'remove_from_cart',
       'remove_from_wishList',
     ];
 
-    if (!event.actions || !validActions.includes(event.action)) {
+    if (!event.action || !validActions.includes(event.action)) {
       continue;
     }
     try {
@@ -34,7 +35,7 @@ const processQueue = async () => {
   }
 }
 
-setInterval(processQueue, 300000) // 300s 5min
+setInterval(processQueue, 3000);
 
 
 // kafka consumer for user events
