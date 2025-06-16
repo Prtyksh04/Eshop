@@ -169,8 +169,6 @@ export const createProduct = async (req: any, res: Response, next: NextFunction)
             images = []
         } = req.body
 
-        console.log("req.body", req.body);
-
         if (!title || !slug || !short_description || !regular_price || !sale_price || !category || !SubCategory || !images || !tags || !stock) {
             return next(new ValidationError("All fields are required!"));
         }
@@ -376,8 +374,6 @@ export const getAllProducts = async (req: Request, res: Response, next: NextFunc
                 orderBy,
             })
         ])
-
-        console.log("Products", products);
 
         res.status(200).json({
             products,

@@ -15,10 +15,12 @@ export async function sendKafkaEvent(eventData: {
 }) {
     try {
         await producer.connect();
+        console.log("📤 Sending Kafka Event:", eventData); // ✅ add this
         await producer.send({
             topic: 'user_events',
             messages: [{ value: JSON.stringify(eventData) }],
         })
+         console.log("✅ Kafka Event Sent Successfully");
     } catch (error) {
         console.log(error);
     } finally {

@@ -15,13 +15,15 @@ const processQueue = async () => {
     if (event.action === 'shop_visit') {
       // update the shop analytics
     }
+    console.log("📦 Processing", events.length, "event(s)");
+
 
     const validActions = [
-      'add_to_wishList',
+      'add_to_wishlist',
       'add_to_cart',
       'product_view',
       'remove_from_cart',
-      'remove_from_wishList',
+      'remove_from_wishlist',
     ];
 
     if (!event.action || !validActions.includes(event.action)) {
@@ -48,6 +50,7 @@ export const consumeKafkaMessages = async () => {
     eachMessage: async ({ message }) => {
       if (!message.value) return;
       const event = JSON.parse(message.value.toString());
+      console.log("📥 Received Kafka Event:", event); 
       eventQueue.push(event);
     }
   })
