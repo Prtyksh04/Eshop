@@ -9,7 +9,7 @@ type Product = {
     price: number,
     image: string,
     quantity?: number,
-    shodId: string,
+    shopId: string,
 }
 
 type Store = {
@@ -49,6 +49,7 @@ export const useStore = create<Store>()(
 
             // Add to Cart
             addToCart: (product, user, location, deviceInfo) => {
+                console.log("🛒 addToCart triggered with:", product);
                 set((state) => {
                     const existing = state.cart?.find((item) => item.id === product.id);
 
@@ -67,7 +68,7 @@ export const useStore = create<Store>()(
                     sendKafkaEvent({
                         userId: user?.id,
                         productId: product?.id,
-                        shopId: product?.shodId,
+                        shopId: product?.shopId,
                         action: 'add_to_cart',
                         country: location?.country || "Unknown",
                         city: location?.city || "Unknown",
@@ -88,7 +89,7 @@ export const useStore = create<Store>()(
                     sendKafkaEvent({
                         userId: user?.id,
                         productId: removeProduct?.id,
-                        shopId: removeProduct?.shodId,
+                        shopId: removeProduct?.shopId,
                         action: 'remove_from_cart',
                         country: location?.country || "Unknown",
                         city: location?.city || "Unknown",
@@ -109,7 +110,7 @@ export const useStore = create<Store>()(
                     sendKafkaEvent({
                         userId: user?.id,
                         productId: product?.id,
-                        shopId: product?.shodId,
+                        shopId: product?.shopId,
                         action: 'add_to_wishlist',
                         country: location?.country || "Unknown",
                         city: location?.city || "Unknown",
@@ -129,7 +130,7 @@ export const useStore = create<Store>()(
                     sendKafkaEvent({
                         userId: user?.id,
                         productId: removeProduct?.id,
-                        shopId: removeProduct?.shodId,
+                        shopId: removeProduct?.shopId,
                         action: 'remove_from_wishlist',
                         country: location?.country || "Unknown",
                         city: location?.city || "Unknown",

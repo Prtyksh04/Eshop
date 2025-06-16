@@ -24,12 +24,12 @@ export const updateUserAnalytics = async (event: any) => {
             updatedActions.push({
                 productId: event?.productId,
                 shopId: event.shopId,
-                action: 'event.action',
+                action: event.action,
                 timestamp: new Date(),
             })
         }
 
-        else if (['add_to_cart', "add_to_wishlist"].includes(event.actions) && !actionExisits) {
+        else if (['add_to_cart', "add_to_wishlist"].includes(event.action) && !actionExisits) {
             updatedActions.push({
                 productId: event?.productId,
                 shopId: event.shopId,
@@ -79,6 +79,8 @@ export const updateUserAnalytics = async (event: any) => {
 
         // update or create userAnalytics
 
+        console.log("📝 Final updatedActions to be saved:", updatedActions);
+
         await prisma.userAnalytics.upsert({
             where: { userId: event.userId },
             update: {
@@ -104,12 +106,13 @@ export const updateUserAnalytics = async (event: any) => {
 
 export const updateProductAnalytics = async (event: any) => {
     try {
+        console.log("📊 updateProductAnalytics received:", event);
         if (!event.productId) return;
 
         //Define update fields dynamically
         const updateFields: any = {};
 
-        if (event.action === 'product_view') updateFields.view = { increment: 1 };
+        if (event.action === 'product_view') updateFields.views = { increment: 1 };
 
         if (event.action === 'add_to_cart')
             updateFields.cartAdds = { increment: 1 };
@@ -136,7 +139,7 @@ export const updateProductAnalytics = async (event: any) => {
                 ...updateFields,
             },
             create: {
-                productId: event.product_id,
+                productId: event.productId,
                 shopId: event.shopId || null,
                 views: event.action === 'product_view' ? 1 : 0,
                 cartAdds: event.action === 'add_to_cart' ? 1 : 0,
@@ -149,17 +152,3 @@ export const updateProductAnalytics = async (event: any) => {
         console.log("Error updating product analytics:", error);
     }
 }
-
-
-/*
-id
-productId
-shopId
-views
-cartAdds
-wishListAdds
-purchases
-lastViewedAt:
-createdAt:
-updatedAt:
-*/

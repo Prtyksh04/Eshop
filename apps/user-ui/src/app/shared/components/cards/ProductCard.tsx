@@ -114,11 +114,15 @@ const ProductCard = ({ product, isEvent }: { product: any; isEvent?: boolean }) 
                         size={22}
                         fill={isWishlisted ? 'red' : 'transparent'}
                         stroke={isWishlisted ? 'red' : '#4b5563'}
-                        onClick={() =>
-                            isWishlisted
-                                ? removeFromWishlist(product.id, user, location, deviceInfo)
-                                : addToWishlist({ ...product, quantity: 1 }, user, location, deviceInfo)
-                        }
+                        onClick={() => {
+                            console.log("🧪 Product before adding to wishlist:", product);
+
+                            if (isWishlisted) {
+                                removeFromWishlist(product.id, user, location, deviceInfo);
+                            } else {
+                                addToWishlist({ ...product, quantity: 1 }, user, location, deviceInfo);
+                            }
+                        }}
                     />
                 </div>
                 <div className='bg-white rounded-full p-[6px] shadow-md'>
@@ -134,7 +138,7 @@ const ProductCard = ({ product, isEvent }: { product: any; isEvent?: boolean }) 
                         size={22}
                         onClick={() =>
                             !isInCart &&
-                            addToCart({ ...product, quanity: 1 }, user, location, deviceInfo)
+                            addToCart({ ...product, quantity: 1 }, user, location, deviceInfo)
                         }
                     />
                 </div>
