@@ -59,7 +59,7 @@ export const useStore = create<Store>()(
                         }
                     }
                     return {
-                        cart: [...state.cart, { ...product, quantity: 1 }],
+                        cart: [...state.cart, { ...product, quantity: product?.quantity }],
                     }
                 });
 
