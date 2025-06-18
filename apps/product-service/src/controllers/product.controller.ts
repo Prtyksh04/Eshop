@@ -389,6 +389,57 @@ export const getAllProducts = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+// get All events
+export const getAllEvents = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+        const skip = (page - 1) * limit;
+
+        const type = req.query.type;
+
+        const baseFilter = { AND: [{ starting_date: { not: null } }, { ending_date: { not: null } }] }
+
+        const orderBy: Prisma.productsOrderByWithRelationInput =
+            type === 'latest'
+                ? { createdAt: "desc" as Prisma.SortOrder }
+                : { totalSales: "desc" as Prisma.SortOrder };
+
+        const [products, total, top10Products] = await Promise.all([
+            prisma.products.findMany({
+                skip,
+                take: limit,
+                include: {
+                    images: true,
+                    Shop: true,
+                },
+                where: baseFilter,
+                orderBy: {
+                    totalSales: 'desc'
+                }
+            }),
+            prisma.products.count({ where: baseFilter }),
+            prisma.products.findMany({
+                take: 10,
+                where: baseFilter,
+                orderBy,
+            })
+        ])
+
+        res.status(200).json({
+            products,
+            top10By: type === 'latest' ? 'latest' : 'topSales',
+            top10Products,
+            total,
+            currentPage: page,
+            totalPage: Math.ceil(total / limit),
+        })
+
+    } catch (error) {
+        return next(error);
+    }
+}
+
 // get product details
 export const getProductDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {

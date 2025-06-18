@@ -171,12 +171,18 @@ const ProductDetails = ({ productDetails }: { productDetails: any }) => {
                             <Heart size={25} fill={isWishlisted ? 'red' : 'transparent'}
                                 className='cursor-pointer'
                                 color={isWishlisted ? 'transparent' : '#777'}
-                                onClick={isWishlisted ? removeFromWishlist(productDetails.id, user, location, deviceInfo) : (addToWishlist({
-                                    ...productDetails, quantity, selectedOptions: {
-                                        color: isSelected,
-                                        size: isSizeSelected
-                                    }
-                                }))}
+                                onClick={() =>
+                                    isWishlisted
+                                        ? removeFromWishlist(productDetails.id, user, location, deviceInfo)
+                                        : addToWishlist({
+                                            ...productDetails,
+                                            quantity,
+                                            selectedOptions: {
+                                                color: isSelected,
+                                                size: isSizeSelected,
+                                            },
+                                        }, user, location, deviceInfo)
+                                }
                             />
                         </div>
                     </div>
