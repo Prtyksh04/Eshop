@@ -257,3 +257,17 @@ model address {
   isDefault Boolean     @default(true)
   createdAt DateTime    @default(now())
 }
+
+model notifications {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String   // e.g., "📦 New Order Received"
+  message       String   // e.g., "A customer just ordered XYZ from your shop."
+  creatorId     String   @db.ObjectId
+  receiverId    String   @db.ObjectId
+  redirect_link String   // e.g., "https://eshop.com/order/123"
+
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
