@@ -203,7 +203,7 @@ export const createOrder = async (req: any, res: Response, next: NextFunction) =
 
             const user = await prisma.users.findUnique({ where: { id: userId } });
             const name = user?.name!;
-            const email = user?.email!
+            const email = user?.email!;
 
             const shopGrouped = cart.reduce((acc: any, item: any) => {
                 if (!acc[item.shopId]) acc[item.shopid] = [];

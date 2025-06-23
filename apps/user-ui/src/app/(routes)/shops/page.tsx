@@ -49,8 +49,7 @@ const Page = () => {
             query.set("page", page.toString());
             query.set("limit", '12');
 
-            const res = await axiosInstance.get(`
-                /product/api/get-filtered-shops?${query.toString()}
+            const res = await axiosInstance.get(`/product/api/get-filtered-shops?${query.toString()}
                 `)
             setShops(res.data.shops);
             setTotalPages(res.data.pagination.totalPages);

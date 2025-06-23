@@ -40,7 +40,7 @@ const page = () => {
     queryKey: ['offers'],
     queryFn: async () => {
       const res = await axiosInstance.get("/product/api/get-all-events?page=1&limit=10");
-      return res.data.events;
+      return res.data.events || [];
     },
     staleTime: 1000 * 60 * 2,
   })
@@ -104,7 +104,7 @@ const page = () => {
               ))}
             </div>
           )}
-          {latestProducts.length === 0 && (
+          {!LatestProductsLoading && latestProducts.length === 0 && (
             <p className='text-center'>
               No Product Available yet
             </p>
@@ -121,7 +121,7 @@ const page = () => {
               ))}
             </div>
           )}
-          {shops.length === 0 && (
+          {!shopLoading &&  shops.length === 0 && (
             <p className='text-center'>
               No Shops Available yet
             </p>
@@ -138,7 +138,7 @@ const page = () => {
               ))}
             </div>
           )}
-          {offers.length === 0 && (
+          {!offersLoading && offers.length === 0 && (
             <p className='text-center'>
               No Offers Available yet
             </p>

@@ -711,7 +711,7 @@ export const searchProducts = async (req: Request, res: Response, next: NextFunc
 }
 
 // top shops
-export const topShops = async (req: Request, res: Response, next: NextFunction) => {
+export const topShops = async (req: Request, res: Response, next: NextFunction) => {4
     try {
         const topShopsData = await prisma.orders.groupBy({
             by: ['shopId'],

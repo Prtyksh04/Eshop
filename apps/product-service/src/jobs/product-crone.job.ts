@@ -8,7 +8,6 @@ cron.schedule('0 * * * *', async () => {
 
 
         // Delete product where `deletedAt` is older than 24 hours
-
         await prisma.products.deleteMany({
             where: {
                 isDeleted: true,

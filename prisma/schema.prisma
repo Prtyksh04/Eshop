@@ -82,7 +82,7 @@ model shops {
   followers     followers[]
   isDeleted     Boolean       @default(false)
   deletedAt     DateTime?
-  imagesId      String        @db.ObjectId
+  imagesId      String?        @db.ObjectId
   orders        orders[]
 }
 
@@ -167,7 +167,7 @@ model userAnalytics {
   lastVisited     DateTime
   actions         Json?
   recommendations Json?
-  lastTrained     DateTime @default(now())
+  lastTrained     DateTime? @default(now())
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
