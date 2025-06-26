@@ -21,14 +21,15 @@ const CheckoutForm = ({
     const [status, setStatus] = useState<'success' | 'failed' | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const total = cartItems.reduce((sum, item) => {
-        sum + item.sale_price * item.quantity
-    })
+    const total = cartItems.reduce((sum, item) => sum + item.sale_price * item.quantity, 0);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg(null);
+
+        console.log("Stripe + : " , stripe);
+        console.log("Element + : ", elements);
 
         if (!stripe || !elements) {
             setLoading(false);
@@ -73,11 +74,11 @@ const CheckoutForm = ({
                         </div>
                     ))}
                     <div className='flex justify-between font-semibold pt-2 border-t border-t-gray-300 mt-2'>
-                        {coupon?.discountAmount !== 0 && (
+                        {!!coupon?.discountAmount && (
                             <>
                                 <span>Discount</span>
                                 <span className='text-green-600'>
-                                    ${(coupon?.discountAmount).toFixed(2)}
+                                    ${(coupon?.discountAmount)?.toFixed(2)}
                                 </span>
                             </>
                         )}
@@ -85,7 +86,7 @@ const CheckoutForm = ({
 
                     <div className='flex justify-between font-semibold mt-2'>
                         <span>Total</span>
-                        <span>${(total - coupon?.discountAmount).toFixed(2)}</span>
+                        <span>${(total - (coupon?.discountAmount || 0)).toFixed(2)}</span>
                     </div>
                 </div>
                 <PaymentElement />

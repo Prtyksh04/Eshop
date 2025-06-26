@@ -1,7 +1,7 @@
-import { ValidationError } from "@packages/error-handler";
+import { NotFoundError, ValidationError } from "@packages/error-handler";
 import prisma from "@packages/libs/prisma";
 import redis from "@packages/redis";
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Stripe from 'stripe';
 import crypto from 'crypto'
 import { Prisma } from "@prisma/client";
@@ -16,6 +16,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export const createPaymentIntent = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { amount, sellerStripeAccountId, sessionId } = req.body;
+
+        console.log(sellerStripeAccountId);
 
         const customerAmount = Math.round(amount * 100);
         const platformFee = Math.floor(customerAmount * 0.1);
@@ -33,6 +35,7 @@ export const createPaymentIntent = async (req: any, res: Response, next: NextFun
                 userId: req.user.id
             }
         });
+        console.log("ClientSecret + : ", paymentIntent.client_secret);
 
         res.send({
             clientSecret: paymentIntent.client_secret,
@@ -370,6 +373,170 @@ export const createOrder = async (req: any, res: Response, next: NextFunction) =
         return next(error);
     }
 }
+
+//get sellers order
+export const getSellerOrders = async (req: any, res: Response, next: NextFunction) => {
+    try {
+        const shop = await prisma.shops.findUnique({
+            where: {
+                sellerId: req.seller.id,
+            }
+        });
+
+        //fetch all orders for this shop
+
+        const orders = await prisma.orders.findMany({
+            where: {
+                shopId: shop?.id
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        avatar: true,
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        res.status(201).json({
+            success: true,
+            orders
+        })
+    } catch (error) {
+        return next(error);
+    }
+}
+
+//get order details
+export const getOrderDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const orderId = req.params.id;
+
+        const order = await prisma.orders.findUnique({
+            where: {
+                id: orderId,
+            },
+            include: {
+                items: true,
+            }
+        });
+
+        if (!order) {
+            return next(new NotFoundError("Order not found with this id!"));
+        }
+
+        const shippingAddress = order.shippingAddressId ? await prisma.address.findUnique({
+            where: {
+                id: order?.shippingAddressId,
+            }
+        }) : null;
+
+
+        const coupon = order.couponCode ? await prisma.discount_codes.findUnique({
+            where: {
+                discountCode: order.couponCode
+            }
+        }) : null;
+
+        //fetch all products details in one go
+        const productIds = order.items.map((item) => item.productId);
+
+        const products = await prisma.products.findMany({
+            where: {
+                id: {
+                    in: productIds
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                images: true
+            }
+        });
+
+        const productMap = new Map(products.map((p) => [p.id, p]));
+
+        const items = order.items.map((item) => ({
+            ...item,
+            selectedOptions: item.selectedOptions,
+            product: productMap.get(item.productId) || null,
+        }));
+
+        res.status(200).json({
+            success: true,
+            order: {
+                ...order,
+                items,
+                shippingAddress,
+                couponCode: coupon,
+            }
+        })
+
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+// update order status
+export const updateDeliveryStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { orderId } = req.params;
+        const { deliveryStatus } = req.body;
+
+        if (!orderId || !deliveryStatus) {
+            return res.status(400).json({ error: "Missing order Id or delivery status." });
+        }
+
+        const allowedStatues = [
+            "Ordered",
+            "Packed",
+            "Shipped",
+            "Out for Delivery",
+            "Delivered",
+        ];
+
+        if (!allowedStatues.includes(deliveryStatus)) {
+            return next(new ValidationError("Invalid delivery status."));
+        }
+
+        const existingOrder = await prisma.orders.findUnique({
+            where: {
+                id: orderId
+            }
+        });
+
+        if (!existingOrder) {
+            return next(new NotFoundError("Order not found"));
+        }
+
+        const updateOrder = await prisma.orders.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                deliveryStatus,
+                updatedAt: new Date(),
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Delivery status updated successfully.",
+            order: updateOrder,
+        })
+
+    } catch (error) {
+        return next(error);
+    }
+}
+
 
 
 

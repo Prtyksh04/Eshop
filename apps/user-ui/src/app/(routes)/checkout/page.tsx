@@ -49,7 +49,6 @@ const Checkout = () => {
 
                 setCartItems(cart);
                 setCoupon(coupon);
-
                 const sellerStripeAccountId = sellers[0].stripeAccountId;
 
                 const intentRes = await axiosInstance.post(
@@ -64,6 +63,7 @@ const Checkout = () => {
                 );
 
                 setClientSecret(intentRes.data.clientSecret);
+                console.log("clientSecret + " , intentRes.data.clientSecret);
             } catch (err: any) {
                 console.error(err);
                 setError("Something went wrong while preparing your payment.");
