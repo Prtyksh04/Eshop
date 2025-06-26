@@ -10,6 +10,7 @@ import axiosInstance from 'apps/user-ui/src/utils/axiosInstance';
 import Image from 'next/image';
 import QuickActionCard from '../../shared/components/cards/QuickActionCard';
 import ShippingAddressSection from '../../shared/components/shippingAddress';
+import ChangePassword from 'apps/user-ui/src/shared/components/change-password';
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -146,6 +147,10 @@ const Page = () => {
               ) : (
                 activeTab === 'Shipping Address' ? (
                   <ShippingAddressSection />
+                ) : activeTab === 'My Orders' ? (
+                  <OrdersTable />
+                ) : activeTab === "Change Password" ? (
+                  <ChangePassword />
                 ) : (
                   <></>
                 )

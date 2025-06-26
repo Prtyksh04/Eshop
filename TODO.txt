@@ -1,6 +1,6 @@
 ✔️ 1. Payment and Order Service Integration
-2. Seller DashBoard : Orders & payments Page
-3. Bug Fixing : Modifying Authentication Logic
+✔️2. Seller DashBoard : Orders & payments Page
+✔️3. Bug Fixing : Modifying Authentication Logic
 4. Implementing Coupon Code validation Logic
 5. Finishing the User profile Page
 6. Admin DashBoard : Login Page Setup
