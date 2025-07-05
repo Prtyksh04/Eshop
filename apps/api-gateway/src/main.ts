@@ -1,19 +1,15 @@
-
-
 import express from 'express';
-import * as path from 'path';
 import cors from "cors";
 import proxy from 'express-http-proxy'
 import morgan from 'morgan';
 import rateLimit from "express-rate-limit";
-import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import initializeConfig from './libs/initializeSiteConfig';
 
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000' , 'http://localhost:3001', 'http://localhost:3002'],
   allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true,
 }))
@@ -40,8 +36,9 @@ app.get('/gateway-health', (req, res) => {
   res.send({ message: 'Welcome to api-gateway!' });
 });
 
+app.use('/admin', proxy('http://localhost:6005'));
 app.use('/order', proxy('http://localhost:6004'));
-app.use('/seller', proxy('http://localhost:6004'));
+app.use('/seller', proxy('http://localhost:6003'));
 app.use('/product', proxy("http://localhost:6002"));
 app.use('/', proxy("http://localhost:6001"));
 

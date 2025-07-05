@@ -13,6 +13,6 @@ export const navItems: NavItemsTypes[] = [
         href: "/offers"
     }, {
         title: "Become A Seller",
-        href: "/become-seller"
+        href: `${process.env.NEXT_PUBLIC_SELLER_SERVER_URI}/signup`,
     }
 ]
