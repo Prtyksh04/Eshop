@@ -573,7 +573,7 @@ export const updateUserPassword = async (req: any, res: Response, next: NextFunc
     }
 }
 
-//login admin
+//login admin  (1:32:24)
 export const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
@@ -597,20 +597,24 @@ export const loginAdmin = async (req: Request, res: Response, next: NextFunction
 
         const isAdmin = user.role === 'admin';
 
-        if (!isAdmin) {
-            sendLog({
-                type: 'error',
-                message: `Admin login failed for ${email} - not a admin`,
-                source: 'auth-service',
-            });
+        if(!isAdmin){
             return next(new AuthError("Invalid access!"));
         }
 
-        sendLog({
-            type: "success",
-            message: `Admin login successful for ${email}`,
-            source: "auth-service",
-        });
+        // if (!isAdmin) {
+        //     sendLog({
+        //         type: 'error',
+        //         message: `Admin login failed for ${email} - not a admin`,
+        //         source: 'auth-service',
+        //     });
+        //     return next(new AuthError("Invalid access!"));
+        // }
+
+        // sendLog({
+        //     type: "success",
+        //     message: `Admin login successful for ${email}`,
+        //     source: "auth-service",
+        // });
 
         res.clearCookie('seller-access-token');
         res.clearCookie('seller-refresh-token');

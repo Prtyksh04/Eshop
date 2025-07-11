@@ -618,3 +618,23 @@ export const getUserOrders = async (req: any, res: Response, next: NextFunction)
         return next(error);
     }
 }
+
+// get admin orders
+export const getAdminOrders = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        // Fetch all orders
+        const orders = await prisma.orders.findMany({
+            include: {
+                user: true,
+                shop: true,
+            },
+            orderBy :{
+                createdAt: "desc",
+            }
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}
