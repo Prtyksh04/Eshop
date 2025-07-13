@@ -10,15 +10,13 @@ import {
 
 import {
     Search,
-    Pencil,
-    Eye,
-    Star,
     ChevronRight,
     Download
 } from 'lucide-react'
 
+import { saveAs } from 'file-saver'
 import Link from 'next/link'
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import axiosInstance from 'apps/admin-ui/src/utils/axiosInstance'
 
@@ -28,25 +26,24 @@ const ProductList = () => {
     const [page, setPage] = useState(1)
     const limit = 10
 
-    const { data, isLoading }: UseQueryResult<any> = useQuery({
-        queryKey: ['all-products', page],
+    const { data, isLoading } = useQuery({
+        queryKey: ['events-list', page],
         queryFn: async () => {
-            const res = await axiosInstance.get(`/admin/api/get-all-products?page=${page}&limit=${limit}`)
+            const res = await axiosInstance.get(`/admin/api/get-all-events?page=${page}&limit=${limit}`)
             return res.data
         },
         placeholderData: (prev) => prev,
         staleTime: 1000 * 60 * 5,
     })
 
-    const allProducts = data?.data || []
-    const filterProducts = useMemo(() => {
-        return allProducts.filter((product: any) =>
-            Object.values(product)
-                .join(' ')
-                .toLowerCase()
-                .includes(deferredFilter.toLowerCase())
-        )
-    }, [allProducts, deferredFilter])
+    const allEvents = data?.data || []
+
+    const filterEvents = useMemo(() => {
+        return allEvents.fiter((event: any) => {
+            const values = Object.values(event).join(" ").toLowerCase();
+            return values.includes(deferredFilter.toLowerCase())
+        })
+    }, [allEvents, deferredFilter])
 
     const totalPages = Math.ceil((data?.meta?.totalProducts ?? 0) / limit)
 
@@ -97,47 +94,27 @@ const ProductList = () => {
                     <span className={row.original.stock < 10 ? 'text-red-500' : 'text-white'}>
                         {row.original.stock} left
                     </span>
-            },
-            {
-                accessorKey: 'category',
-                header: "Category",
-                cell: ({ row }: any) => <span>{row.original.category?.name || '-'}</span>
-            },
-            {
-                accessorKey: 'rating',
-                header: "Rating",
-                cell: ({ row }: any) => (
-                    <div className='flex items-center gap-1 text-yellow-400'>
-                        <Star fill='#fde047' />
-                        <span className='text-white'>{row.original.ratings || 5}</span>
-                    </div>
-                )
-            },
-            {
-                header: 'Actions',
-                cell: ({ row }: any) => (
-                    <div className='flex gap-3'>
-                        <Link
-                            href={`/product/${row.original.id}`}
-                            className='text-blue-400 hover:text-blue-300 transition'
-                        >
-                            <Eye size={18} />
-                        </Link>
-                        <Link
-                            href={`/product/edit/${row.original.id}`}
-                            className='text-yellow-400 hover:text-yellow-300 transition'
-                        >
-                            <Pencil size={18} />
-                        </Link>
-                    </div>
-                )
+            }, {
+                accessorKey: 'starting_date',
+                header: "Start,",
+                cell: ({ row }) =>
+                    new Date(row.original.starting_date).toLocaleDateString(),
+            }, {
+                accessorKey: 'ending_date',
+                header: 'End',
+                cell: ({ row }) =>
+                    new Date(row.original.ending_date).toLocaleDateString(),
+            }, {
+                accessorKey: "Shop name",
+                header: "Shop Name",
+                cell: ({ row }) => row.original.Shop?.name || '-',
             }
         ],
         []
     )
 
     const table = useReactTable({
-        data: filterProducts,
+        data: filterEvents,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -146,20 +123,20 @@ const ProductList = () => {
         onGlobalFilterChange: setGlobalFilter
     })
 
-    const saveAs = (blob: Blob, filename: string) => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = filename
-        a.style.display = 'none'
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        window.URL.revokeObjectURL(url)
-    }
+    // const saveAs = (blob: Blob, filename: string) => {
+    //     const url = window.URL.createObjectURL(blob)
+    //     const a = document.createElement('a')
+    //     a.href = url
+    //     a.download = filename
+    //     a.style.display = 'none'
+    //     document.body.appendChild(a)
+    //     a.click()
+    //     document.body.removeChild(a)
+    //     window.URL.revokeObjectURL(url)
+    // }
 
     const exportCSV = () => {
-        const csvRows = filterProducts.map((p: any) =>
+        const csvRows = filterEvents.map((p: any) =>
             `${p.title},${p.slug},${p.sale_price},${p.stock},${p.category?.name || ''},${p.ratings}`
         )
         const blob = new Blob(
