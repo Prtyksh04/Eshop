@@ -1,0 +1,29 @@
+{
+  "name": "@./logger-service",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "targets": {
+      "serve": {
+        "continuous": true,
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@./logger-service:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@./logger-service:build:development"
+          },
+          "production": {
+            "buildTarget": "@./logger-service:build:production"
+          }
+        }
+      }
+    }
+  }
+}
