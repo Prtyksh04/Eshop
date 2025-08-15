@@ -82,7 +82,7 @@ model shops {
   followers     followers[]
   isDeleted     Boolean       @default(false)
   deletedAt     DateTime?
-  imagesId      String?        @db.ObjectId
+  imagesId      String?       @db.ObjectId
   orders        orders[]
 }
 
@@ -159,8 +159,8 @@ enum productStatus {
 }
 
 model userAnalytics {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @unique @db.ObjectId
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @unique @db.ObjectId
   country         String?
   city            String?
   device          String?
@@ -259,15 +259,49 @@ model address {
 }
 
 model notifications {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  title         String   // e.g., "📦 New Order Received"
-  message       String   // e.g., "A customer just ordered XYZ from your shop."
-  creatorId     String   @db.ObjectId
-  receiverId    String   @db.ObjectId
-  redirect_link String   // e.g., "https://eshop.com/order/123"
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  title         String // e.g., "📦 New Order Received"
+  message       String // e.g., "A customer just ordered XYZ from your shop."
+  creatorId     String @db.ObjectId
+  receiverId    String @db.ObjectId
+  redirect_link String // e.g., "https://eshop.com/order/123"
 
-  isRead        Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model conversationGroup {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  isGroup        Boolean  @default(false)
+  name           String?
+  creatorId      String
+  participantIds String[] @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model participant {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String    @db.ObjectId
+  userId         String?   @db.ObjectId
+  sellerId       String?   @db.ObjectId
+  lastSeenAt     DateTime?
+  isOnline       Boolean   @default(false)
+  unreadCount    Int       @default(0)
+  muted          Boolean   @default(false)
+  joinedAt       DateTime  @default(now())
+}
+
+model message {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String   @db.ObjectId
+  senderId       String   @db.ObjectId
+  senderType     String
+  content        String?
+  attachments    String[]
+  status         String   @default("sent")
+  createdAt      DateTime @default(now())
+
+  @@unique([conversationId, createdAt, senderId, content]) // Ensures unique messages in a conversation by timestamp
+}
