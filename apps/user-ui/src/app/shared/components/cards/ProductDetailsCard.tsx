@@ -8,6 +8,8 @@ import { useStore } from 'apps/user-ui/src/store'
 import useUser from 'apps/user-ui/src/hooks/useUser'
 import useLocationTracking from 'apps/user-ui/src/hooks/useLocationTracking'
 import useDeviceTracking from 'apps/user-ui/src/hooks/useDeviceInfo'
+import axiosInstance from 'apps/user-ui/src/utils/axiosInstance'
+import { isProtected } from 'apps/user-ui/src/utils/protected'
 
 const ProductDetailsCard = ({
     data,
@@ -19,7 +21,8 @@ const ProductDetailsCard = ({
     const [activeImage, setActiveImage] = useState(0)
     const [isSelected, setIsSelected] = useState(data?.colors?.[0] || "")
     const [isSizeSelected, setIsSizeSelected] = useState(data?.sizes?.[0] || "")
-    const [quantity, setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
 
@@ -39,6 +42,22 @@ const ProductDetailsCard = ({
 
     const estimatedDelivery = new Date();
     estimatedDelivery.setDate(estimatedDelivery.getDate() + 5);
+
+    const handlechat = async () => {
+        if (isLoading) {
+            return;
+        }
+        setIsLoading(true);
+
+        try {
+            const res = await axiosInstance.post('/chatting/api/create-user-conversationGroup', { sellerId: data?.Shop?.sellerId }, isProtected);
+            router.push(`/inbox?conversationId=${res.data.conversation.id}`);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div
@@ -117,7 +136,8 @@ const ProductDetailsCard = ({
                                 </p>
                             </div>
                             <button
-                                onClick={() => router.push(`/inbox?shopId=${data?.Shop?.id}`)}
+                                // onClick={() => router.push(`/inbox?shopId=${data?.Shop?.id}`)}
+                                onClick={() => handlechat()}
                                 className="bg-blue-600 text-white text-sm font-medium px-4 py-1.5 rounded hover:bg-blue-700 transition"
                             >
                                 Chat with Seller
