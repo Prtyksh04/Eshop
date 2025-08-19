@@ -6,11 +6,12 @@
       "node",
       "express"
     ],
-    "rootDir": "src",
+    "rootDir": "../../",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "../../packages/**/*.ts"
   ],
   "exclude": []
 }

@@ -1,5 +1,6 @@
 'use client'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useWebSocket } from 'apps/user-ui/src/context/web-socket-context';
 import useRequiredAuth from 'apps/user-ui/src/hooks/useRequiredAuth';
 import ChatInput from 'apps/user-ui/src/shared/components/chats/chatinput';
 import axiosInstance from 'apps/user-ui/src/utils/axiosInstance';
@@ -18,6 +19,7 @@ const Page = () => {
     const messageContainerRef = useRef<HTMLDivElement | null>(null);
     const scrollAnchorRef = useRef<HTMLDivElement | null>(null);
     const queryClient = useQueryClient();
+    const { ws, unreadCount } = useWebSocket();
 
     const [chats, setChats] = useState<any[]>([])
     const [selectedChat, setSelectedChat] = useState<any | null>(null)
@@ -57,6 +59,11 @@ const Page = () => {
     }, [conversations]);
 
     useEffect(() => {
+        if (messages?.length > 0) scrollToBottom();
+    }, [messages]);
+
+
+    useEffect(() => {
         if (conversationId && chats.length > 0) {
             const chat = chats.find(c => c.id === conversationId);
             setSelectedChat(chat || null);
@@ -67,11 +74,51 @@ const Page = () => {
         setHasFetchedOnce(false);
         setChats((prev) => prev.map((c) => c.conversationId === chat.conversationId ? { ...c, unreadCount: 0 } : c));
         router.push(`?conversationId=${chat.conversationId}`);
+
+        ws?.send(JSON.stringify({
+            type: "MARK_AS_SEEN",
+            conversationId: chat.conversationId,
+        }));
     };
+
+    const scrollToBottom = () => {
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, 0);
+        })
+    }
 
     const handleSendMessage = async (e: any) => {
         e.preventDefault();
 
+        if (!message.trim() || !selectedChat) return;
+
+        const payload = {
+            fromUserId: user?.id,
+            toUserId: selectedChat.seller?.id,
+            conversationId: selectedChat?.conversationId,
+            messageBody: message,
+            senderType: "user"
+        };
+
+        ws?.send(JSON.stringify(payload));
+
+        queryClient.setQueryData(['messages', selectedChat.conversationId], (old: any = []) => [
+            ...old,
+            {
+                content: payload.messageBody,
+                senderType: 'user',
+                seen: false,
+                createdAt: new Date().toISOString(),
+            }
+        ]);
+
+        setChats((prevChats) =>
+            prevChats.map((chat) => chat.conversationId ? { ...chat, lastMessage: payload.messageBody } : chat));
+
+        setMessage("");
+        scrollToBottom();
     }
 
     const loadMoreMessages = async () => {
