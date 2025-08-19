@@ -1,15 +1,18 @@
 ✔️ 1. Payment and Order Service Integration
 ✔️2. Seller DashBoard : Orders & payments Page
 ✔️3. Bug Fixing : Modifying Authentication Logic
-4. Implementing Coupon Code validation Logic
-5. Finishing the User profile Page
+✔️4. Implementing Coupon Code validation Logic
+✔️5. Finishing the User profile Page
 6. Admin DashBoard : Login Page Setup
 7. Admmin DashBoard : Full UI and Feature Integration
-8. Implementing chatting Service
+✔️8. Implementing chatting Service
 9. user Order Details and Shop public Preview
-10. Logger Service Implementation
-11. Complete Notification Service
+✔️10. Logger Service Implementation
+✔️11. Complete Notification Service
 12. User UI layout Customization
-13. Recommendation System : Data Collection
-14. Recommendation System Implementation : ML logic for Recommendation
+✔️13. Recommendation System : Data Collection
+✔️14. Recommendation System Implementation : ML logic for Recommendation
 15. Frontend Integration of Recommendation System
+
+
+Mostly Frontend part is pending Have to do a lot of Frontend this upcoming week
