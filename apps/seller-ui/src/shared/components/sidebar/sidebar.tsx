@@ -18,7 +18,7 @@ const SideBarWrapper = () => {
 
   useEffect(() => {
     setActiveSidebar(pathName);
-  }, [pathName, setActiveSidebar])
+  }, [pathName, setActiveSidebar, seller])
 
   const getIconColor = (route: string) => activeSidebar === route ? '#0085ff' : '#969696'
 

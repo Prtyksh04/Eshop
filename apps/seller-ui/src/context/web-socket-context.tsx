@@ -43,7 +43,7 @@ export const WebSocketProvider = ({
 
     }, [seller.id]);
 
-    if (wsReady) return null;
+    // if (wsReady) return null;
 
     return (
         <WebSocketContext.Provider value={{ ws: wsRef.current, unreadCount }}>
