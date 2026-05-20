@@ -14,7 +14,7 @@ import axiosInstance from 'apps/user-ui/src/utils/axiosInstance';
 
 const ProductDetails = ({ productDetails }: { productDetails: any }) => {
 
-    const { user, isLoading } = useUser();
+    const { user } = useUser();
     const location = useLocationTracking();
     const deviceInfo = useDeviceTracking();
 
@@ -23,7 +23,7 @@ const ProductDetails = ({ productDetails }: { productDetails: any }) => {
     const [isSelected, setIsSelected] = useState(productDetails?.colors?.[0] || "");
     const [isSizeSelected, setIsSizeSelected] = useState(productDetails?.sizes?.[0] || "");
     const [quantity, setQuantity] = useState(1);
-    const [priceRange, setPriceRange] = useState([
+    const [priceRange] = useState([
         productDetails?.sale_price, 1199
     ]);
     const [recommendedProducts, setRecommendedProducts] = useState([]);
@@ -197,11 +197,11 @@ const ProductDetails = ({ productDetails }: { productDetails: any }) => {
 
                     <div className="mt-3">
                         <span className='text-3xl font-bold text-orange-500'>
-                            ${productDetails?.sale_price}
+                            ₹{productDetails?.sale_price}
                         </span>
                         <div className='flex gap-2 pb-2 text-lg border-b border-b-slate-200'>
                             <span className='text-gray-400 line-through'>
-                                ${productDetails?.regular_price}
+                                ₹{productDetails?.regular_price}
                             </span>
                             <span className='text-gray-500'>{discountPercentage}%</span>
                         </div>

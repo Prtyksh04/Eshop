@@ -39,47 +39,52 @@ const page = () => {
 
 
   return (
-    <div className='w-full h-screen flex items-center justify-center'>
-      <div className='md:w-[450px] pb-8 bg-slate-800 rounded-md shadow'>
-        <form className='p-5' onSubmit={handleSubmit(onSubmit)}>
-          <h1 className='text-3xl pb-3 pt-4 font-semibold text-center text-white'>
-            Welcome Admin
-          </h1>
-          <Input
-            label='Email'
-            placeholder='support@Eshop.com'
-            {...register('email', {
-              required: 'Email is required',
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: 'Invalid email address'
-              }
-            })}
-          />
-
-          <div className='mt-3'>
+    <div className='w-full h-screen flex items-center justify-center bg-slate-50'>
+      <div className='md:w-[450px] pb-8 bg-white rounded-xl shadow-lg border border-slate-100'>
+        <form className='p-8' method="POST" onSubmit={handleSubmit(onSubmit)}>
+          <div className='text-center mb-8'>
+            <h1 className='text-3xl font-bold text-slate-900'>
+              Welcome Admin
+            </h1>
+            <p className='text-slate-500 mt-2'>Sign in to your Vendora dashboard</p>
+          </div>
+          <div className='space-y-4'>
             <Input
-              label='Password'
-              type='password'
-              placeholder='********'
-              {...register("password", {
-                required: 'Password is required',
+              label='Email'
+              placeholder='admin@vendora.com'
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  message: 'Invalid email address'
+                }
               })}
             />
+
+            <div>
+              <Input
+                label='Password'
+                type='password'
+                placeholder='••••••••'
+                {...register("password", {
+                  required: 'Password is required',
+                })}
+              />
+            </div>
           </div>
           <button
             disabled={loginMutation.isPending}
-            className='w-full mt-5 text-xl flex justify-center font-semibold cursor-pointer bg-blue-600 text-white py-2 rounded-lg'
+            className='w-full mt-6 text-lg flex justify-center font-semibold cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors'
             type='submit'
           >
             {loginMutation.isPending ? (
-              <div className='h-6 w-6 border-2 border-gray-100 border-t-transparent rounded-full animate-spin' />
+              <div className='h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin' />
             ) : (
-              <>Login</>
+              <>Sign In</>
             )}
           </button>
           {serverError && (
-            <div className='text-red-500 text-sm mt-2'>
+            <div className='text-red-500 text-sm mt-4 text-center bg-red-50 p-3 rounded-lg'>
               {serverError}
             </div>
           )}

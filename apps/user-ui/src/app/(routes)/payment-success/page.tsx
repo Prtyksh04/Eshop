@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { CheckCircle, Truck } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useStore } from "apps/user-ui/src/store";
@@ -53,4 +53,14 @@ const PaymentSuccessPage = () => {
   );
 };
 
-export default PaymentSuccessPage;
+export default function PaymentSuccess() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-[70vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" />
+      </div>
+    }>
+      <PaymentSuccessPage />
+    </Suspense>
+  )
+}

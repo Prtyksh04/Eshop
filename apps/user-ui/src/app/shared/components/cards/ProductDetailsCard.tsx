@@ -203,11 +203,11 @@ const ProductDetailsCard = ({
                         <div className="mt-5">
                             <div className="flex gap-4 items-end">
                                 <h3 className="text-2xl font-semibold text-gray-800">
-                                    ${data?.sale_price}
+                                    ₹{data?.sale_price}
                                 </h3>
                                 {data?.regular_price && (
                                     <span className="text-red-500 line-through text-lg">
-                                        ${data.regular_price}
+                                        ₹{data.regular_price}
                                     </span>
                                 )}
                             </div>

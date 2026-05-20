@@ -39,7 +39,7 @@ const ProductList = () => {
     const allEvents = data?.data || []
 
     const filterEvents = useMemo(() => {
-        return allEvents.fiter((event: any) => {
+        return allEvents.filter((event: any) => {
             const values = Object.values(event).join(" ").toLowerCase();
             return values.includes(deferredFilter.toLowerCase())
         })
@@ -97,17 +97,17 @@ const ProductList = () => {
             }, {
                 accessorKey: 'starting_date',
                 header: "Start,",
-                cell: ({ row }) =>
+                cell: ({ row }: any) =>
                     new Date(row.original.starting_date).toLocaleDateString(),
             }, {
                 accessorKey: 'ending_date',
                 header: 'End',
-                cell: ({ row }) =>
+                cell: ({ row }: any) =>
                     new Date(row.original.ending_date).toLocaleDateString(),
             }, {
                 accessorKey: "Shop name",
                 header: "Shop Name",
-                cell: ({ row }) => row.original.Shop?.name || '-',
+                cell: ({ row }: any) => row.original.Shop?.name || '-',
             }
         ],
         []

@@ -206,10 +206,10 @@ const CartPage = () => {
                                             {item.id === discountedProductId ? (
                                                 <div className='flex flex-col items-center'>
                                                     <span className='line-through text-gray-500 text-sm'>
-                                                        ${item.sale_price.toFixed(2)}
+                                                        ₹{item.sale_price.toFixed(2)}
                                                     </span>{" "}
                                                     <span className='text-green-600 font-semibold'>
-                                                        ${((item.sale_price * (100 - discountPercent)) / 100).toFixed(2)}
+                                                        ₹{((item.sale_price * (100 - discountPercent)) / 100).toFixed(2)}
                                                     </span>
                                                     <span className='text-xs text-green-700 bg-white'>
                                                         Discount Applied
@@ -218,7 +218,7 @@ const CartPage = () => {
                                             ) : (
                                                 <div>
                                                     <span>
-                                                        ${item.sale_price.toFixed(2)}
+                                                        ₹{item.sale_price.toFixed(2)}
                                                     </span>
                                                 </div>
                                             )}
@@ -258,7 +258,7 @@ const CartPage = () => {
                                         Discount ({discountPercent}%)
                                     </span>
                                     <span className='text-green-600'>
-                                        - ${discountAmount.toFixed(2)}
+                                        - ₹{discountAmount.toFixed(2)}
                                     </span>
                                 </div>
                             )}
@@ -267,7 +267,7 @@ const CartPage = () => {
                                     Subtotal
                                 </span>
                                 <span>
-                                    ${(subTotal - discountAmount).toFixed(2)}
+                                    ₹{(subTotal - discountAmount).toFixed(2)}
                                 </span>
                             </div>
                             <hr className='my-4 text-slate-200' />
@@ -337,7 +337,7 @@ const CartPage = () => {
                                 <hr className='my-4 text-slate-200' />
                                 <div className='flex justify-between items-center text-[#010f1c] text-[20px] font-[550] mb-3'>
                                     <span className='font-jost'>Total</span>
-                                    <span>${(subTotal - discountAmount).toFixed(2)}</span>
+                                    <span>₹{(subTotal - discountAmount).toFixed(2)}</span>
                                 </div>
                                 <button
                                     onClick={createPaymentSession}

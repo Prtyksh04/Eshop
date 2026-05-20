@@ -1,6 +1,6 @@
 'use client'
 import axiosInstance from 'apps/user-ui/src/utils/axiosInstance';
-import { Divide, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -111,20 +111,20 @@ const page = () => {
             <div className='mb-6 space-y-1 text-sm text-gray-700'>
                 <p>
                     <span className='font-semibold'>Payment Status:</span>{" "}
-                    <span className='font-green-600 font-medium'>{order.status}</span>
+                    <span className='text-green-600 font-medium'>{order.status}</span>
                 </p>
                 <p>
                     <span className='font-semibold'>Total Paid:</span>{" "}
-                    <span className='font-medium'>${order.total.toFixed(2)}</span>
+                    <span className='font-medium'>₹{order.total.toFixed(2)}</span>
                 </p>
                 {order.discountAmount > 0 && (
                     <p>
                         <span className='font-semibold'>Discount Applied:</span>{" "}
                         <span className='text-green-700'>
-                            -${order.discountAmount.toFixed(2)}(
+                            -₹{order.discountAmount.toFixed(2)} (
                             {order.couponCode?.discountType === 'percentage'
-                                ? `${order.couponCode.discountVale}%` :
-                                `$${order.couponCode.discountVale}`}{" "}
+                                ? `${order.couponCode.discountValue}%` :
+                                `₹${order.couponCode.discountValue}`}{" "}
                             )
                         </span>
                     </p>
@@ -138,37 +138,37 @@ const page = () => {
                     </p>
                 )}
                 <p>
-                    <span className='font-semibold'>{" "}</span>
+                    <span className='font-semibold'>Date: </span>
                     {new Date(order.createdAt).toLocaleDateString()}
                 </p>
             </div>
             {/* Shipping info */}
             {order.shippingAddress && (
-                <div className='mb-6 text-sm text-gray-700'>
-                    <h2 className='text-md font-semibold mb-2'>Shipping Address</h2>
-                    <p>{order.shippingAddress.name}</p>
-                    <p>
+                <div className='mb-6 text-sm text-gray-700 bg-white p-4 rounded-md border border-gray-200'>
+                    <h2 className='text-md font-semibold mb-2 text-gray-800'>Shipping Address</h2>
+                    <p className='font-medium'>{order.shippingAddress.name}</p>
+                    <p className='text-gray-600'>
                         {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
                         {order.shippingAddress.zip}
                     </p>
-                    <p>{order.shippingAddress.country}</p>
+                    <p className='text-gray-600'>{order.shippingAddress.country}</p>
                 </div>
             )}
             {/* Order items */}
             <div>
-                <h2 className='text-lg font-semibold text-gray-700 mb-4'>Order items</h2>
+                <h2 className='text-lg font-semibold text-gray-700 mb-4'>Order Items</h2>
                 <div className='space-y-4'>
-                    {order.items.mao((item: any) => (
+                    {order.items.map((item: any) => (
                         <div
                             key={item.productId}
-                            className='border border-x-gray-200 rounded-md p-4 flex items-center'
+                            className='border border-gray-200 rounded-md p-4 flex items-center bg-white'
                         >
                             <img
                                 src={item.product?.images[0]?.url || "/placeholder.png"}
                                 alt={item.product?.title || "Product image"}
                                 className='w-16 h-16 object-cover rounded-md border border-gray-200'
                             />
-                            <div className='flex-1'>
+                            <div className='flex-1 ml-4'>
                                 <p className='font-medium text-gray-800'>
                                     {item.product?.title || "Unnamed product"}
                                 </p>
@@ -177,7 +177,7 @@ const page = () => {
                                 </p>
                                 {item.selectedOptions &&
                                     Object.keys(item.selectedOptions).length > 0 && (
-                                        <div className='text-xs text-gray-500 mt-1'>
+                                        <div className='text-xs text-gray-500 mt-1 flex flex-wrap gap-2'>
                                             {Object.entries(item.selectedOptions).map(
                                                 ([key, value]: [string, any]) =>
                                                     value && (
@@ -188,7 +188,7 @@ const page = () => {
                                                                 {key}:
                                                             </span>{" "}
                                                             <span
-                                                                className='w-3 h-3 rounded-full block'
+                                                                className='w-3 h-3 rounded-full block border border-gray-300'
                                                                 style={{ backgroundColor: value }}
                                                             ></span>
                                                         </span>
@@ -199,7 +199,7 @@ const page = () => {
                                 }
                             </div>
                             <p className='text-sm font-semibold text-gray-800'>
-                                ${item.price.toFixed(2)}
+                                ₹{item.price.toFixed(2)}
                             </p>
                         </div>
                     ))}

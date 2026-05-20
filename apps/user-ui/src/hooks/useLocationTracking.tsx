@@ -5,6 +5,7 @@ const LOCATION_STORAGE_KEY = "use_location";
 const LOCATION_EXPIRY_DAYS = 20;
 
 const getStoredLocation = () => {
+    if (typeof window === 'undefined') return null;
     const storedData = localStorage.getItem(LOCATION_STORAGE_KEY);
 
     if (!storedData) { return null; }

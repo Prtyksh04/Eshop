@@ -424,6 +424,12 @@ export const getOrderDetails = async (req: Request, res: Response, next: NextFun
             },
             include: {
                 items: true,
+                user: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             }
         });
 

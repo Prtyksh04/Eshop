@@ -1,5 +1,5 @@
 'use client'
-import { shops } from "@prisma/client"
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { YoutubeIcon } from "lucide-react"
 import axiosInstance from "apps/user-ui/src/utils/axiosInstance"
@@ -27,7 +27,7 @@ const SellerProfile = ({
     shop,
     followersCount
 }: {
-    shop: shops;
+    shop: any;
     followersCount: number;
 }) => {
     const [activeTab, setActiveTab] = useState("Products")
@@ -123,8 +123,8 @@ const SellerProfile = ({
         <div>
             <div className="relative w-full flex justify-center">
                 <Image
-                    src={shop?.coverBanner || "something"}
-                    alt={"Seller COver"}
+                    src={shop?.coverBanner || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop"}
+                    alt={"Seller Cover"}
                     className="w-full h-[400px] object-cover"
                     width={1200}
                     height={300}
@@ -134,9 +134,9 @@ const SellerProfile = ({
             <div className="w-[85%] lg:w-[70%] mt-[-50px] mx-auto relative z-20 flex flex-col lg:flex-row gap-6">
                 <div className="bg-gray-200 p-6 rounded-lg shadow-lg flex-1">
                     <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                        <div className="relative w-[100px] h-[100px] rounded-full border-4 border-slate-50">
+                        <div className="relative w-[100px] h-[100px] rounded-full border-4 border-slate-50 overflow-hidden">
                             <Image
-                                src={"Something"}
+                                src={shop?.avatar?.url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop"}
                                 alt="Seller Avatar"
                                 layout="fill"
                                 objectFit="cover"
@@ -223,7 +223,7 @@ const SellerProfile = ({
             </div>
 
             {/* Tabs section */}
-            <div className="w-[85%] lg:w-[70%] max-auto mt-8">
+            <div className="w-[85%] lg:w-[70%] mx-auto mt-8">
                 {/* Tabs */}
                 <div className="flex border-b border-gray-300">
                     {TABS.map((tab) => (
@@ -231,7 +231,7 @@ const SellerProfile = ({
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`py-3 px-6 text-lg font-semibold ${activeTab === tab
-                                ? "text-slate-800 broder-b-2 border-blue-600" : "text-slate-600"
+                                ? "text-slate-800 border-b-2 border-blue-600" : "text-slate-600"
                                 } transition`}
                         >
                             {tab}
@@ -281,7 +281,7 @@ const SellerProfile = ({
                                     product={product}
                                 />
                             ))}
-                            {products?.length === 0 && (
+                            {events?.length === 0 && (
                                 <p className="py-2">NO Offers available yet:</p>
                             )}
                         </div>

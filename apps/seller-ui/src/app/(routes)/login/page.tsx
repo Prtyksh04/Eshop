@@ -43,85 +43,95 @@ const Login = () => {
 
 
     return (
-        <div className='w-full py-10 min-h-screen bg-[#f1f1f1]'>
-            <h1 className='text-center text-4xl font-semibold text-black font-poppins'>
-                Login
-            </h1>
-            <p className='text-center text-lg font-medium py-3 text-[#00000099]'>
-                Home . Login
-            </p>
-            <div className='w-full flex justify-center'>
-                <div className='md:w-[480px] p-8 bg-white shadow rounded-lg'>
-                    <h3 className='text-3xl font-semibold text-center mb-2'>
-                        Login to Ecom
+        <div className='w-full py-10 min-h-screen bg-slate-50 flex flex-col items-center justify-center'>
+            <div className='text-center mb-8'>
+                <h1 className='text-4xl font-bold text-slate-900'>
+                    Vendora Seller Portal
+                </h1>
+                <p className='text-lg text-slate-500 mt-2'>
+                    Manage your store and grow your business
+                </p>
+            </div>
+            <div className='w-full flex justify-center px-4'>
+                <div className='w-full max-w-md p-8 bg-white shadow-lg border border-slate-100 rounded-xl'>
+                    <h3 className='text-2xl font-semibold text-center text-slate-900 mb-2'>
+                        Welcome Back
                     </h3>
-                    <p className='text-center text-grey-400 mb-4'>
-                        Don't have an account?
-                        <Link href={'/signup'} className='text-blue-500'>
+                    <p className='text-center text-slate-500 mb-6'>
+                        Don't have an account?{' '}
+                        <Link href={'/signup'} className='text-blue-600 font-medium hover:underline'>
                             Sign up
                         </Link>
                     </p>
-                    <div className='flex items-center justify-center my-5 text-gray-400 text-sm'>
-                        <div className='flex-1 border-t border-gray-300' />
-                        <span className='px-3'>or Sign in with Email</span>
-                        <div className='flex-1 border-t border-gray-300' />
+                    <div className='flex items-center justify-center my-6 text-slate-400 text-sm'>
+                        <div className='flex-1 border-t border-slate-200' />
+                        <span className='px-4 font-medium'>Sign in with Email</span>
+                        <div className='flex-1 border-t border-slate-200' />
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <label className='block text-gray-700 mb-1'>Email</label>
-                        <input type="email"
-                            placeholder='sainipratyaksh28@gmail.com'
-                            className='w-full p-2 border border-gray-300 outline-0 !rounded mb-1'
-                            {...register("email", {
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                    message: "Invalid email address"
-                                }
-                            })}
-                        />
-                        {errors.email && <p className='text-red-500 text-sm'>{String(errors.email.message)}</p>}
-                        <label className='block text-gray-700 mb-1'>Password</label>
-                        <div className='relative'>
-                            <input
-                                type={passwordVisible ? "text" : "password"}
-                                placeholder='Min. 6 characters'
-                                className='w-full p-2 border border-gray-300 outline-0 !rounded mb-1'
-                                {...register("password", {
-                                    required: "password is required",
-                                    minLength: {
-                                        value: 6,
-                                        message: "Password must be at least 6 characters long"
+                    <form method="POST" onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+                        <div>
+                            <label className='block text-sm font-medium text-slate-700 mb-1'>Email</label>
+                            <input type="email"
+                                placeholder='seller@vendora.com'
+                                className='w-full p-2.5 bg-slate-50 border border-slate-200 text-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
+                                {...register("email", {
+                                    required: "Email is required",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                        message: "Invalid email address"
                                     }
                                 })}
                             />
-                            <button type='button' onClick={() => { setPasswordVisible(!passwordVisible) }} className='absolute inset-y-0 right-3 flex items-center text-gray-400'>
-                                {passwordVisible ? <Eye /> : <EyeOff />}
-                            </button>
-                            {errors.password && <p className='text-red-500 text-sm'>{String(errors.password.message)}</p>}
+                            {errors.email && <p className='text-red-500 text-sm mt-1'>{String(errors.email.message)}</p>}
                         </div>
-                        <div className='flex items-center justify-between my-4'>
-                            <label className='flex items-center text-gray-600 cursor-pointer'>
+                        <div>
+                            <label className='block text-sm font-medium text-slate-700 mb-1'>Password</label>
+                            <div className='relative'>
+                                <input
+                                    type={passwordVisible ? "text" : "password"}
+                                    placeholder='••••••••'
+                                    className='w-full p-2.5 bg-slate-50 border border-slate-200 text-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
+                                    {...register("password", {
+                                        required: "Password is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "Password must be at least 6 characters long"
+                                        }
+                                    })}
+                                />
+                                <button type='button' onClick={() => { setPasswordVisible(!passwordVisible) }} className='absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors'>
+                                    {passwordVisible ? <Eye size={20} /> : <EyeOff size={20} />}
+                                </button>
+                            </div>
+                            {errors.password && <p className='text-red-500 text-sm mt-1'>{String(errors.password.message)}</p>}
+                        </div>
+                        <div className='flex items-center justify-between pt-2 pb-4'>
+                            <label className='flex items-center text-sm text-slate-600 cursor-pointer'>
                                 <input
                                     type="checkbox"
-                                    className='mr-2'
+                                    className='mr-2 w-4 h-4 text-blue-600 bg-slate-50 border-slate-300 rounded focus:ring-blue-500'
                                     checked={remeberMe}
                                     onChange={() => setRememberMe(!remeberMe)}
                                 />
                                 Remember me
                             </label>
-                            <Link href={'/forgot-password'} className='text-blue-500 text-sm'>
+                            <Link href={'/forgot-password'} className='text-sm text-blue-600 font-medium hover:underline'>
                                 Forgot Password?
                             </Link>
                         </div>
                         <button
                             type='submit'
                             disabled={loginMutation.isPending}
-                            className='w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg'
+                            className='w-full text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors flex justify-center items-center'
                         >
-                            {loginMutation.isPending ? "Login in..." : "Login"}
+                            {loginMutation.isPending ? (
+                                <div className='h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                            ) : "Sign In"}
                         </button>
                         {serverError && (
-                            <p className='text-red-500 text-sm mt-2'>{serverError}</p>
+                            <div className='text-red-500 text-sm mt-4 text-center bg-red-50 p-3 rounded-lg'>
+                                {serverError}
+                            </div>
                         )}
                     </form>
                 </div>

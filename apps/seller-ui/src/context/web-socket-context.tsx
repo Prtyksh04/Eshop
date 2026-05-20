@@ -10,7 +10,6 @@ export const WebSocketProvider = ({
     children: React.ReactNode,
     seller: any
 }) => {
-    const [wsReady, setWsReady] = useState(false);
     const wsRef = useRef<WebSocket | null>(null);
     const [unreadCount, setUnreadCount] = useState<Record<string, number>>({});
 
@@ -22,7 +21,6 @@ export const WebSocketProvider = ({
 
         ws.onopen = () => {
             ws.send(`seller${seller.id}`);
-            setWsReady(true);
         }
 
         ws.onmessage = (event) => {
@@ -43,7 +41,6 @@ export const WebSocketProvider = ({
 
     }, [seller.id]);
 
-    // if (wsReady) return null;
 
     return (
         <WebSocketContext.Provider value={{ ws: wsRef.current, unreadCount }}>

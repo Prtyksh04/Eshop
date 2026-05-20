@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react'
 import { useReactTable, getCoreRowModel, getFilteredRowModel, flexRender } from "@tanstack/react-table"
 
-import { Search, Eye, ChevronRight } from 'lucide-react'
+import { Search, Eye, ChevronRight, Loader2 } from 'lucide-react'
 import { useQuery } from "@tanstack/react-query"
 import axiosInstance from 'apps/seller-ui/src/utils/axiosInstance'
 import Link from 'next/link'
@@ -26,64 +26,72 @@ const SellerPayments = () => {
     const columns = useMemo(() => [
         {
             accessorKey: "id",
-            header: "Order  ID",
+            header: "Order ID",
             cell: ({ row }: any) => (
-                <span className='text-white text-sm truncate'>
-                    ${row.original.id.slice(-6).toUpperCase()}
+                <span className='text-slate-800 font-semibold text-sm'>
+                    #{row.original.id.slice(-6).toUpperCase()}
                 </span>
             )
         }, {
             accessorKey: 'user.name',
             header: "Buyer",
             cell: ({ row }: any) => (
-                <span className='text-white'>
+                <span className='text-slate-700 font-medium'>
                     {row.original.user?.name ?? "Guest"}
                 </span>
             )
         }, {
-            header: "Seller Earning",
+            header: "Seller Earning (90%)",
             cell: ({ row }: any) => {
                 const sellerShare = row.original.total * 0.9;
                 return (
-                    <span className='text-green-400 font-medium'>
-                        ${sellerShare.toFixed(2)}
+                    <span className='text-emerald-600 font-semibold text-sm'>
+                        ₹{sellerShare.toFixed(2)}
                     </span>
                 )
             }
         }, {
-            header: "Admin Fee",
+            header: "Platform Fee (10%)",
             cell: ({ row }: any) => {
                 const adminFee = row.original.total * 0.1;
                 return (
-                    <span className='text-yellow-400'>
-                        ${adminFee.toFixed(2)}
+                    <span className='text-slate-600 font-medium text-sm'>
+                        ₹{adminFee.toFixed(2)}
                     </span>
                 )
             }
         }, {
             accessorKey: "status",
             header: "Status",
-            cell: ({ row }: any) => (
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.original.status === "Paid" ? "bg-green-600 text-white" : "bg-yellow-500 text-white"}`}>
-                    {row.original.status}
-                </span>
-            )
+            cell: ({ row }: any) => {
+                const isPaid = row.original.status === "Paid";
+                return (
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                        isPaid 
+                            ? "bg-green-50 text-green-700 border-green-200" 
+                            : "bg-amber-50 text-amber-700 border-amber-200"
+                    }`}>
+                        {row.original.status}
+                    </span>
+                );
+            }
         },
         {
             accessorKey: 'createdAt',
             header: "Date",
             cell: ({ row }: any) => {
                 const date = new Date(row.original.createdAt).toLocaleDateString();
-                return <span className='text-white text-sm'>{date}</span>
+                return <span className='text-slate-500 text-sm'>{date}</span>
             }
         }, {
             header: "Actions",
             cell: ({ row }: any) => (
                 <Link
                     href={`/order/${row.original.id}`}
-                    className='text-blue-400 hover:text-blue-300 transition'
+                    className='text-blue-600 hover:text-blue-800 transition inline-flex items-center gap-1.5 font-medium text-sm'
                 >
-                    <Eye size={18} />
+                    <Eye size={16} />
+                    <span>Details</span>
                 </Link>
             )
         }
@@ -103,38 +111,41 @@ const SellerPayments = () => {
     })
 
     return (
-        <div className='w-full min-h-screen p-8'>
-            <div className="text-2xl text-white font-semibold mb-2">Payments</div>
+        <div className='w-full min-h-screen p-8 text-slate-800 bg-slate-50'>
+            <div className="text-2xl text-slate-800 font-bold mb-2">Payments</div>
 
             {/* Breadcrumb */}
-            <div className='flex items-center text-white mb-4'>
-                <Link href={'/dashboard'} className='text-[#80Deea] cursor-pointer'>Dashboard</Link>
-                <ChevronRight size={20} className='opacity-[.8]' />
-                <span className='text-white'>Payments</span>
+            <div className='flex items-center text-slate-500 mb-6 text-sm font-medium'>
+                <Link href={'/dashboard'} className='text-blue-600 hover:underline cursor-pointer'>Dashboard</Link>
+                <ChevronRight size={16} className='mx-1' />
+                <span className='text-slate-600'>Payments</span>
             </div>
 
             {/* Search Bar */}
-            <div className="my-4 flex items-center bg-gray-900 p-2 rounded-md flex-1">
-                <Search size={18} className="text-gray-400 mr-2" />
+            <div className="mb-6 flex items-center bg-white border border-slate-200 p-2.5 rounded-lg max-w-md shadow-sm">
+                <Search size={18} className="text-slate-400 mr-2" />
                 <input
                     type="text"
                     placeholder="Search Payments..."
-                    className="w-full bg-transparent text-white outline-none"
+                    className="w-full bg-transparent text-slate-800 outline-none placeholder-slate-400 text-sm"
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                 />
             </div>
-            {/* Table */}
-            <div className="overflow-x-auto bg-gray-900 rounded-lg p-4">
+
+            {/* Table Card */}
+            <div className="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm p-4">
                 {isLoading ? (
-                    <p className="text-center text-white">Loading Payments ...</p>
+                    <div className="flex justify-center items-center py-10">
+                        <Loader2 className="animate-spin text-blue-600 h-8 w-8" />
+                    </div>
                 ) : (
-                    <table className="w-full text-white">
+                    <table className="w-full text-slate-700 text-sm">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <tr key={headerGroup.id} className="border-b border-gray-800">
+                                <tr key={headerGroup.id} className="border-b border-slate-100">
                                     {headerGroup.headers.map((header) => (
-                                        <th key={header.id} className="p-3 text-left text-sm">
+                                        <th key={header.id} className="p-3 text-left font-semibold text-slate-500 uppercase tracking-wider text-xs bg-slate-50/55">
                                             {flexRender(
                                                 header.column.columnDef.header,
                                                 header.getContext()
@@ -144,14 +155,14 @@ const SellerPayments = () => {
                                 </tr>
                             ))}
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-slate-100">
                             {table.getRowModel().rows.map((row) => (
                                 <tr
                                     key={row.id}
-                                    className="border-b border-gray-800 hover:bg-gray-900 transition"
+                                    className="hover:bg-slate-50/70 transition"
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="p-3 text-sm">
+                                        <td key={cell.id} className="p-3 align-middle">
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
@@ -165,7 +176,7 @@ const SellerPayments = () => {
                 )}
 
                 {!isLoading && orders?.length === 0 && (
-                    <p className="text-center py-3 text-white">No Orders found!</p>
+                    <p className="text-center py-10 text-slate-500 font-medium">No Orders found!</p>
                 )}
             </div>
         </div>

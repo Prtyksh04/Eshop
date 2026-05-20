@@ -1,6 +1,6 @@
 'use client'
 import { BadgeCheck, Bell, CheckCircle, Clock, Gift, Inbox, Loader2, Lock, LogOut, MapPin, Pencil, PhoneCall, Receipt, Settings, ShoppingBag, Truck, User } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import StatCard from '../../shared/components/cards/StatCard';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -210,7 +210,17 @@ const Page = () => {
   )
 }
 
-export default Page;
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-[70vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" />
+      </div>
+    }>
+      <Page />
+    </Suspense>
+  )
+}
 
 const NavItem = ({ label, Icon, active, danger, onClick }: any) => (
   <button

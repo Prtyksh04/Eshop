@@ -5,7 +5,7 @@ import useUser from 'apps/user-ui/src/hooks/useUser';
 import { useStore } from 'apps/user-ui/src/store';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { use } from 'react'
+import React from 'react'
 
 const WishListPage = () => {
 
@@ -88,7 +88,7 @@ const WishListPage = () => {
                                             <span>{item.title}</span>
                                         </td>
                                         <td className='px-6 text-lg'>
-                                            ${ }{item.sale_price.toFixed(2)}
+                                            ₹{item.sale_price.toFixed(2)}
                                         </td>
                                         <td>
                                             <div className='flex justify-center items-center border border-gray-200 rounded-[20px] w-[90px] p-[2px]'>

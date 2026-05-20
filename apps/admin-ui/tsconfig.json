@@ -32,14 +32,15 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": [
-    "src/**/*.ts",
-    "../../packages/**/*.tsx",
-    "src/**/*.tsx",
-    "src/**/*.js",
-    "src/**/*.jsx",
     "../../apps/admin-ui/.next/types/**/*.ts",
     "../../dist/apps/admin-ui/.next/types/**/*.ts",
-    "next-env.d.ts"
+    "../../packages/**/*.tsx",
+    "next-env.d.ts",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "out-tsc",

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import axiosInstance from '../utils/axiosInstance';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 
@@ -18,12 +17,10 @@ const useAdmin = () => {
         retry: 1,
     });
 
-    const history = useRouter();
-
     useEffect(() => {
-        if (!isLoading && !admin) {
-            history.push("/");
-        }
+        // if (!isLoading && !admin) {
+        //     // redirect logic
+        // }
     }, [admin, isLoading]);
 
     return { admin, isLoading, isError, refetch };

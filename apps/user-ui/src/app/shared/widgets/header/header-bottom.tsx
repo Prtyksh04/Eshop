@@ -27,12 +27,11 @@ const HeaderBottom = () => {
 
     return (
         <div
-            className={`w-full transition-all duration-300 ease-in-out ${isSticky ? 'fixed top-0 left-0 z-50 bg-white shadow-md' : 'relative'
+            className={`w-full sticky top-0 left-0 z-50 bg-white transition-all duration-300 ease-in-out ${isSticky ? 'py-3 shadow-md' : 'py-2'
                 }`}
         >
             <div
-                className={`w-[80%] m-auto flex items-center justify-between ${isSticky ? 'py-3' : 'py-2'
-                    } transition-all duration-300 ease-in-out`}
+                className={`w-[80%] m-auto flex items-center justify-between transition-all duration-300 ease-in-out`}
             >
                 {/* All Categories Dropdown Toggle */}
                 <div className='relative'>

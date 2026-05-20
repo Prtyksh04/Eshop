@@ -64,7 +64,7 @@ const Page = () => {
     useEffect(() => {
         updateURL();
         fetchFilteredShops();
-    }, [selectedCategories, page]);
+    }, [selectedCategories, selectedCountries, page]);
 
 
     const toggleCategory = (label: string) => {
@@ -133,7 +133,7 @@ const Page = () => {
                                     >
                                         <label className='flex items-center gap-3 text-sm text-gray-700'>
                                             <input type="checkbox"
-                                                checked={selectedCategories.includes(country)}
+                                                checked={selectedCountries.includes(country)}
                                                 onChange={() => toggleCountry(country)}
                                                 className='accent-blue-600'
                                             />

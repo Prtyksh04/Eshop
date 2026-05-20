@@ -70,7 +70,7 @@ const CheckoutForm = ({
                             <span>
                                 {item.quantity} x {item.title}
                             </span>
-                            <span>${(item.quantity * item.sale_price).toFixed(2)}</span>
+                            <span>₹{(item.quantity * item.sale_price).toFixed(2)}</span>
                         </div>
                     ))}
                     <div className='flex justify-between font-semibold pt-2 border-t border-t-gray-300 mt-2'>
@@ -78,7 +78,7 @@ const CheckoutForm = ({
                             <>
                                 <span>Discount</span>
                                 <span className='text-green-600'>
-                                    ${(coupon?.discountAmount)?.toFixed(2)}
+                                    ₹{(coupon?.discountAmount)?.toFixed(2)}
                                 </span>
                             </>
                         )}
@@ -86,7 +86,7 @@ const CheckoutForm = ({
 
                     <div className='flex justify-between font-semibold mt-2'>
                         <span>Total</span>
-                        <span>${(total - (coupon?.discountAmount || 0)).toFixed(2)}</span>
+                        <span>₹{(total - (coupon?.discountAmount || 0)).toFixed(2)}</span>
                     </div>
                 </div>
                 <PaymentElement />

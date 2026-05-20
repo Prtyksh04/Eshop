@@ -10,8 +10,8 @@ import {
   getSortedRowModel
 } from "@tanstack/react-table"
 
-import { Download, Ban, Search, ChevronRight } from "lucide-react"
-import { useQuery, useMutation, useQueryClient, UseQueryResult } from '@tanstack/react-query'
+import { Download, Search, ChevronRight } from "lucide-react"
+import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import axiosInstance from "apps/admin-ui/src/utils/axiosInstance"
 import { saveAs } from "file-saver"
 import Link from "next/link"
@@ -36,11 +36,8 @@ const UsersPage = () => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [page, setPage] = useState(1);
   const [roleFilter, setRoleFilter] = useState("");
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const deferredGlobalFilter = useDeferredValue(globalFilter);
   const limit = 10;
-  const queryClient = useQueryClient();
 
   const { data, isLoading }: UseQueryResult<UsersResponse, Error> = useQuery<
     UsersResponse,

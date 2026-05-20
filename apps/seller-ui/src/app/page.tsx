@@ -1,11 +1,7 @@
-import React from 'react'
+import { redirect } from 'next/navigation';
 
 const Page = () => {
-  return (
-    <div className='bg-[#f5f5f5]'>
-      Page
-    </div>
-  )
+  redirect('/dashboard');
 }
 
-export default Page
+export default Page;

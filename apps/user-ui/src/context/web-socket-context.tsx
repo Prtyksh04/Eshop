@@ -44,7 +44,7 @@ export const WebSocketProvider = ({
     }, [user.id]);
 
     return (
-        <WebSocketContext.Provider value={{ ws: wsRef.current, unreadCount }}>
+        <WebSocketContext.Provider value={{ ws: wsRef.current, unreadCount, wsReady }}>
             {children}
         </WebSocketContext.Provider>
     );

@@ -7,19 +7,18 @@ import axiosInstance from 'apps/user-ui/src/utils/axiosInstance';
 import { isProtected } from 'apps/user-ui/src/utils/protected';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, Suspense } from 'react'
 
 
 const Page = () => {
 
     const searchParams = useSearchParams();
-    const { user, isLoading: userLoading } = useRequiredAuth();
+    const { user } = useRequiredAuth();
     const router = useRouter();
-    const wsRef = useRef<HTMLDivElement | null>(null);
     const messageContainerRef = useRef<HTMLDivElement | null>(null);
     const scrollAnchorRef = useRef<HTMLDivElement | null>(null);
     const queryClient = useQueryClient();
-    const { ws, unreadCount } = useWebSocket();
+    const { ws } = useWebSocket();
 
     const [chats, setChats] = useState<any[]>([])
     const [selectedChat, setSelectedChat] = useState<any | null>(null)
@@ -265,4 +264,14 @@ const Page = () => {
     )
 }
 
-export default Page
+export default function PageWithSuspense() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen bg-slate-50">
+                <div className="text-slate-400 text-sm">Loading chat...</div>
+            </div>
+        }>
+            <Page />
+        </Suspense>
+    )
+}

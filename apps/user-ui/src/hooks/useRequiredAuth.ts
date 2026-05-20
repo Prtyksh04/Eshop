@@ -8,9 +8,9 @@ const useRequiredAuth = () => {
     const { user, isLoading } = useUser();
 
     useEffect(() => {
-        if (!isLoading && !user) {
-            router.replace("/login");
-        }
+        // if (!isLoading && !user) {
+        //     router.replace("/login");
+        // }
     }, [user, isLoading, router]);
 
     return { user, isLoading };
