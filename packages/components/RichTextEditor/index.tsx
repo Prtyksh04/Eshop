@@ -49,51 +49,65 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
           ],
         }}
         placeholder="Write a detailed product description here..."
-        className="bg-transparent border border-gray-700 text-white rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all"
+        className="bg-white border border-slate-200 text-slate-900 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all"
         style={{ minHeight: '250px' }}
       />
 
       <style>{`
         .ql-toolbar {
-          background: transparent;
-          border: 1px solid #444;
+          background: #fff;
+          border: 1px solid #e2e8f0;
           border-radius: 8px 8px 0 0;
+          color: #0f172a;
         }
 
         .ql-container {
-          background: transparent;
-          border: 1px solid #444;
+          background: #fff;
+          border: 1px solid #e2e8f0;
           border-top: none;
           border-radius: 0 0 8px 8px;
-          color: white;
+          color: #0f172a;
         }
 
         .ql-editor {
-          color: white;
+          color: #0f172a;
           min-height: 200px;
           padding: 12px;
         }
 
         .ql-editor.ql-blank::before {
-          color: #aaa !important;
+          color: #94a3b8 !important;
           font-style: normal;
         }
 
         .ql-picker-options {
-          background: #333 !important;
-          color: white !important;
+          background: #fff !important;
+          color: #0f172a !important;
+          border: 1px solid #e2e8f0 !important;
         }
 
         .ql-picker-item {
-          color: white !important;
+          color: #0f172a !important;
         }
 
         .ql-stroke {
-          stroke: white !important;
+          stroke: #0f172a !important;
+        }
+
+        .ql-fill {
+          fill: #0f172a !important;
         }
 
         .ql-snow .ql-picker {
-          color: white;
+          color: #0f172a;
+        }
+
+        .ql-snow .ql-picker-label {
+          color: #0f172a !important;
+        }
+
+        .ql-snow .ql-picker-options .ql-picker-item {
+          color: #0f172a !important;
         }
       `}</style>
     </div>

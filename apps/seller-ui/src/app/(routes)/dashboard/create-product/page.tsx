@@ -504,13 +504,19 @@ const page = () => {
                                 <div>
                                     <Input
                                         label='Video URL'
-                                        placeholder='https://www.youtube.com/embed/xyz123'
+                                        placeholder='https://example.com/video-or-any-link'
                                         className="w-full"
                                         {...register('video_url', {
-                                            pattern: {
-                                                value: /^https:\/\/(www\.)?youtube\.com\/embed\/[a-zA-Z0-9_-]+$/,
-                                                message: "Please enter a valid YouTube embed URL (https://www.youtube.com/embed/VIDEO_ID)",
-                                            }
+                                            validate: (value) => {
+                                                if (!value || !value.trim()) return true;
+                                                try {
+                                                    const parsedUrl = new URL(value);
+                                                    return ['http:', 'https:'].includes(parsedUrl.protocol) ||
+                                                        'Please enter a valid URL (http or https)';
+                                                } catch {
+                                                    return 'Please enter a valid URL (http or https)';
+                                                }
+                                            },
                                         })}
                                     />
                                     {errors.video_url && (
