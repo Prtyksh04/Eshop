@@ -1,8 +1,8 @@
 'use client'
-import React from 'react'
-import { DollarSign, Package, Clock, TrendingUp, ArrowUpRight, Eye } from 'lucide-react'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { mockOrders } from '../../../utils/mockData'
+import React from 'react';
+import { DollarSign, Package, Clock, TrendingUp, ArrowUpRight, Eye } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { mockOrders } from '../../../utils/mockData';
 
 const salesData = [
   { name: 'Jan', revenue: 4200, orders: 35 },
@@ -14,9 +14,14 @@ const salesData = [
 ];
 
 const Page = () => {
+  const currencyFormatter = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 2,
+  });
+
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <span className="bg-blue-500/30 text-blue-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm border border-blue-400/20">
@@ -30,7 +35,7 @@ const Page = () => {
         <div className="flex gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/10">
           <div className="text-center px-4 border-r border-white/20">
             <p className="text-xs text-blue-200 font-medium">Today's Sales</p>
-            <p className="text-2xl font-bold mt-1">$1,240</p>
+            <p className="text-2xl font-bold mt-1">{currencyFormatter.format(1240)}</p>
           </div>
           <div className="text-center px-4">
             <p className="text-xs text-blue-200 font-medium">Store Visits</p>
@@ -39,9 +44,7 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Card 1 */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
@@ -52,10 +55,9 @@ const Page = () => {
             </span>
           </div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Total Revenue</p>
-          <h3 className="text-2xl font-bold text-slate-900">$12,450.00</h3>
+          <h3 className="text-2xl font-bold text-slate-900">{currencyFormatter.format(12450)}</h3>
         </div>
 
-        {/* Card 2 */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
@@ -69,7 +71,6 @@ const Page = () => {
           <h3 className="text-2xl font-bold text-slate-900">24 Items</h3>
         </div>
 
-        {/* Card 3 */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
@@ -83,7 +84,6 @@ const Page = () => {
           <h3 className="text-2xl font-bold text-slate-900">12 Orders</h3>
         </div>
 
-        {/* Card 4 */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
@@ -98,7 +98,6 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Analytics Chart Section */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -108,7 +107,7 @@ const Page = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-blue-600"></span>
-              <span className="text-xs font-medium text-slate-600">Revenue ($)</span>
+              <span className="text-xs font-medium text-slate-600">Revenue (INR)</span>
             </div>
           </div>
         </div>
@@ -117,16 +116,22 @@ const Page = () => {
             <AreaChart data={salesData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0}/>
+                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} tickFormatter={(val) => `₹${val}`} />
-              <Tooltip 
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#64748b', fontSize: 12 }}
+                tickFormatter={(val) => currencyFormatter.format(Number(val))}
+              />
+              <Tooltip
                 contentStyle={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                 labelStyle={{ fontWeight: 'bold', color: '#0f172a', marginBottom: '4px' }}
+                formatter={(value: number) => [currencyFormatter.format(value), 'Revenue']}
               />
               <Area type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
             </AreaChart>
@@ -134,7 +139,6 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Recent Orders Section */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -158,20 +162,20 @@ const Page = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm text-slate-600">
-              {mockOrders.orders.map((order, idx) => (
+              {mockOrders.orders.map((order) => (
                 <tr key={order.id} className="hover:bg-slate-50/80 transition">
                   <td className="py-4 px-4 font-semibold text-slate-900">#{order.id.toUpperCase()}</td>
                   <td className="py-4 px-4">
                     <div className="font-medium text-slate-900">{order.user.name}</div>
                     <div className="text-xs text-slate-400">{order.user.email}</div>
                   </td>
-                  <td className="py-4 px-4 text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td className="py-4 px-4 text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString('en-IN')}</td>
                   <td className="py-4 px-4">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                       {order.status}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-right font-bold text-slate-900">${order.totalPrice.toFixed(2)}</td>
+                  <td className="py-4 px-4 text-right font-bold text-slate-900">{currencyFormatter.format(order.totalPrice)}</td>
                   <td className="py-4 px-4 text-center">
                     <button className="p-1.5 hover:bg-blue-50 rounded-lg text-slate-400 hover:text-blue-600 transition">
                       <Eye size={18} />
@@ -184,7 +188,7 @@ const Page = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

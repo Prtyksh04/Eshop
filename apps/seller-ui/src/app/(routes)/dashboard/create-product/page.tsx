@@ -33,6 +33,8 @@ const page = () => {
     const [loading, setLoading] = useState(false)
     const [images, setImages] = useState<(UploadedImage | null)[]>([null])
     const [selectedImage, setSelectedImage] = useState('');
+    const [selectedImageSource, setSelectedImageSource] = useState('');
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
     const [pictureUploadingLoader, setpictureUploadingLoader] = useState(false);
     const [activeEffect, setActiveEffect] = useState<string | null>(null);
     const [processing, setProcessing] = useState(false);
@@ -154,13 +156,27 @@ const page = () => {
     }
 
     const applyTransformation = async (transformation: string) => {
-        if (!selectedImage || processing) return;
+        if (!selectedImageSource || processing) return;
         setProcessing(true);
         setActiveEffect(transformation);
         try {
-            const transformedUrl = `${selectedImage}?tr=${transformation}`;
+            const transformedUrlObject = new URL(selectedImageSource);
+            transformedUrlObject.searchParams.set("tr", transformation);
+            const transformedUrl = transformedUrlObject.toString();
             console.log("transformedUrl", transformedUrl);
             setSelectedImage(transformedUrl);
+            if (selectedImageIndex !== null) {
+                const updatedImages = [...images];
+                const current = updatedImages[selectedImageIndex];
+                if (current) {
+                    updatedImages[selectedImageIndex] = {
+                        ...current,
+                        file_url: transformedUrl,
+                    };
+                    setImages(updatedImages);
+                    setValue('images', updatedImages);
+                }
+            }
 
         } catch (error) {
             console.log(error);
@@ -172,6 +188,26 @@ const page = () => {
 
     const handleSaveDraft = () => {
 
+    }
+
+    const closeImageEnhancerModal = () => {
+        if (selectedImage && selectedImageIndex !== null) {
+            const updatedImages = [...images];
+            const current = updatedImages[selectedImageIndex];
+            if (current) {
+                updatedImages[selectedImageIndex] = {
+                    ...current,
+                    file_url: selectedImage,
+                };
+                setImages(updatedImages);
+                setValue('images', updatedImages);
+            }
+        }
+
+        setOpenImageModal(false);
+        setActiveEffect(null);
+        setSelectedImageSource('');
+        setSelectedImageIndex(null);
     }
 
     return (
@@ -205,7 +241,12 @@ const page = () => {
                                 index={0}
                                 pictureUploadingLoader={pictureUploadingLoader}
                                 onImageChange={handleImageChange}
-                                setSelectedImage={setSelectedImage}
+                                setSelectedImage={(imageUrl, imageIndex) => {
+                                    setSelectedImage(imageUrl);
+                                    setSelectedImageSource(imageUrl);
+                                    setSelectedImageIndex(imageIndex);
+                                    setActiveEffect(null);
+                                }}
                                 onRemove={handleRemoveImage}
                             />
                         )}
@@ -218,13 +259,18 @@ const page = () => {
                                     key={index}
                                     pictureUploadingLoader={pictureUploadingLoader}
                                     small={true}
-                                    images={images}
-                                    index={index + 1}
-                                    onImageChange={handleImageChange}
-                                    setSelectedImage={setSelectedImage}
-                                    onRemove={handleRemoveImage}
-                                />
-                            ))}
+                                images={images}
+                                index={index + 1}
+                                onImageChange={handleImageChange}
+                                setSelectedImage={(imageUrl, imageIndex) => {
+                                    setSelectedImage(imageUrl);
+                                    setSelectedImageSource(imageUrl);
+                                    setSelectedImageIndex(imageIndex);
+                                    setActiveEffect(null);
+                                }}
+                                onRemove={handleRemoveImage}
+                            />
+                        ))}
                         </div>
                     </div>
 
@@ -652,7 +698,7 @@ const page = () => {
                                 <X
                                     size={20}
                                     className='cursor-pointer text-slate-400 hover:text-slate-600 transition'
-                                    onClick={() => setOpenImageModal(!OpenImageModal)}
+                                    onClick={closeImageEnhancerModal}
                                 />
                             </div>
                             <div className='relative w-full h-[250px] rounded-lg overflow-hidden border border-slate-200 shadow-inner bg-slate-50'>

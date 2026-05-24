@@ -12,21 +12,23 @@ const ImagePlaceHolder = ({
     defaultImage?: string | null;
     setOpenImageModal: (openImageModal: boolean) => void;
     index?: any,
-    setSelectedImage: (e: string) => void,
+    setSelectedImage: (imageUrl: string, index: number) => void,
     images: any,
     pictureUploadingLoader: boolean
 
 }) => {
 
-    const [imagePreview, setImagePreview] = useState<string | null>(defaultImage)
+    const [localPreview, setLocalPreview] = useState<string | null>(defaultImage)
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            setImagePreview(URL.createObjectURL(file));
+            setLocalPreview(URL.createObjectURL(file));
             onImageChange(file, index!);
         }
     }
+
+    const currentImageUrl = images?.[index!]?.file_url || localPreview;
 
     return (
         <div className={`relative ${small ? 'h-[180px]' : 'h-[480px]'} w-full cursor-pointer bg-[#1e1e1e] border border-gray-600 rounded-lg flex flex-col justify-center items-center`}>
@@ -36,7 +38,7 @@ const ImagePlaceHolder = ({
                 id={`image-upload-${index}`}
                 onChange={handleFileChange}
             />
-            {imagePreview ? (
+            {currentImageUrl ? (
                 <>
                     <button type='button'
                         disabled={pictureUploadingLoader}
@@ -50,7 +52,9 @@ const ImagePlaceHolder = ({
                         className='absolute top-3 right-[70px] p-2 !rounded bg-blue-500 shadow-lg cursor-pointer'
                         onClick={() => {
                             setOpenImageModal(true);
-                            setSelectedImage(images[index].file_url);
+                            if (images?.[index!]?.file_url) {
+                                setSelectedImage(images[index].file_url, index!);
+                            }
                         }}
                     >
                         <WandSparkles size={16} />
@@ -64,13 +68,15 @@ const ImagePlaceHolder = ({
                     <Pencil size={16} />
                 </label>
             )}
-            {imagePreview ? (
+            {currentImageUrl ? (
                 <Image
-                    src={imagePreview}
+                    key={currentImageUrl}
+                    src={currentImageUrl}
                     alt="uploaded"
                     width={400}
                     height={300}
                     className='w-full h-full object-cover rounded-lg'
+                    unoptimized
                 />
             ) : (
                 <>
